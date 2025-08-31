@@ -144,10 +144,53 @@ create an `xslx` file with some image
 Hexada@hexada ~/Downloads$ unzip test.xlsx' -d xlsx-payload
 ```
 
-```xml
+```
+Hexada@hexada ~/Downloads/xlsx-payload/xl/drawings$ cat drawing1.xml
+```
 
-Hexada@hexada ~/Downloads/xlsx-payload/xl/drawings$ cat drawing1.xml                                                                                              
-<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer" xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer"><xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:ext cx="6886575" cy="4314825"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="0" name="image1.png" title="Зображення"/><xdr:cNvPicPr preferRelativeResize="0"/></xdr:nvPicPr><xdr:blipFill><a:blip cstate="print" r:link="rId1"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/></xdr:spPr></xdr:pic><xdr:clientData fLocksWithSheet="0"/></xdr:oneCellAnchor></xdr:wsDr>
+```xml
+<xdr:wsDr
+    xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+    xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
+    xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"
+    xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
+    xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"
+    xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer">
+
+    <xdr:oneCellAnchor>
+        <xdr:from>
+            <xdr:col>0</xdr:col>
+            <xdr:colOff>0</xdr:colOff>
+            <xdr:row>0</xdr:row>
+            <xdr:rowOff>0</xdr:rowOff>
+        </xdr:from>
+        <xdr:ext cx="6886575" cy="4314825"/>
+        <xdr:pic>
+            <xdr:nvPicPr>
+                <xdr:cNvPr id="0" name="image1.png" title="Зображення"/>
+                <xdr:cNvPicPr preferRelativeResize="0"/>
+            </xdr:nvPicPr>
+            <xdr:blipFill>
+                <a:blip cstate="print" r:link="rId1"/>
+                <a:stretch>
+                    <a:fillRect/>
+                </a:stretch>
+            </xdr:blipFill>
+            <xdr:spPr>
+                <a:prstGeom prst="rect">
+                    <a:avLst/>
+                </a:prstGeom>
+                <a:noFill/>
+            </xdr:spPr>
+        </xdr:pic>
+        <xdr:clientData fLocksWithSheet="0"/>
+    </xdr:oneCellAnchor>
+
+</xdr:wsDr>
 ```
 
 ```xml
