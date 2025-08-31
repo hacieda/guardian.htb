@@ -58,9 +58,7 @@ gitea                   [Status: 200, Size: 13498, Words: 1049, Lines: 245, Dura
 
 <img width="1398" height="980" alt="image" src="https://github.com/user-attachments/assets/fa0a0513-d643-49b8-9193-609e74c2d225" />
 
-GU0142023:GU0142023
-
-GU0142023
+GU0142023:GU1234
 
 <img width="1651" height="394" alt="image" src="https://github.com/user-attachments/assets/54aa450b-4b34-4e43-ad97-fa84b8e15e71" />
 
@@ -232,7 +230,7 @@ Archive:  xss.xlsx
 
 it must look like it:
 
-```                                                                       
+```xml                                                                      
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
           xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
