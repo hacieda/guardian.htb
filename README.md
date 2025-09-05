@@ -372,4 +372,31 @@ Press CTRL+C to quit
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6ace0581-c4e5-44d7-b28c-c66fad03a6b4" />
 
+<img width="1852" height="666" alt="image" src="https://github.com/user-attachments/assets/48251890-e962-4109-860e-548f68517387" />
 
+`admin/reports.php`
+
+```php
+<?php
+require '../includes/auth.php';
+require '../config/db.php';
+
+if (!isAuthenticated() || $_SESSION['user_role'] !== 'admin') {
+    header('Location: /login.php');
+    exit();
+}
+
+$report = $_GET['report'] ?? 'reports/academic.php';
+
+if (strpos($report, '..') !== false) {
+    die("<h2>Malicious request blocked 🚫 </h2>");
+}   
+
+if (!preg_match('/^(.*(enrollment|academic|financial|system)\.php)$/', $report)) {
+    die("<h2>Access denied. Invalid file 🚫</h2>");
+}
+```
+
+<img width="1869" height="660" alt="image" src="https://github.com/user-attachments/assets/f7ea5fc0-3813-4da8-83f8-151bae554bfb" />
+
+https://github.com/synacktiv/php_filter_chain_generator
