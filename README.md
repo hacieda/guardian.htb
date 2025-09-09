@@ -400,3 +400,13 @@ if (!preg_match('/^(.*(enrollment|academic|financial|system)\.php)$/', $report))
 <img width="1869" height="660" alt="image" src="https://github.com/user-attachments/assets/f7ea5fc0-3813-4da8-83f8-151bae554bfb" />
 
 https://github.com/synacktiv/php_filter_chain_generator
+
+```
+(lab-env) Hexada@hexada ~/pentest-env/pentesting-tools/php_filter_chain_generator$ python3 php_filter_chain_generator.py --chain '<?php echo "OK"; ?>'       main 
+[+] The following gadget chain will generate the following code : <?php echo "OK"; ?> (base64 value: PD9waHAgZWNobyAiT0siOyA/Pg)
+```
+
+<img width="1239" height="438" alt="image" src="https://github.com/user-attachments/assets/7e124a92-a508-4371-967c-99b340ee202b" />
+
+
+
